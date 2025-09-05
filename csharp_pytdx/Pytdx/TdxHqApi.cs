@@ -1,7 +1,13 @@
 // C# Translation of pytdx/hq.py
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Net.Sockets;
+using System.Threading.Tasks;
+using Microsoft.Data.Analysis;
+
 
 namespace Pytdx
 {
@@ -55,23 +61,78 @@ namespace Pytdx
 
         // Other API methods will be added here...
 
-        public static Microsoft.Data.Analysis.DataFrame ToDataFrame(IEnumerable<SecurityQuote> quotes)
+        public static DataFrame ToDataFrame(IEnumerable<SecurityQuote> quotes)
         {
-            var columns = new List<Microsoft.Data.Analysis.DataFrameColumn>
+            var columns = new List<DataFrameColumn>
             {
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<byte>("Market", quotes.Select(q => q.Market)),
-                new Microsoft.Data.Analysis.StringDataFrameColumn("Code", quotes.Select(q => q.Code)),
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<double>("Price", quotes.Select(q => q.Price)),
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<double>("LastClose", quotes.Select(q => q.LastClose)),
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<double>("Open", quotes.Select(q => q.Open)),
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<double>("High", quotes.Select(q => q.High)),
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<double>("Low", quotes.Select(q => q.Low)),
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<int>("Vol", quotes.Select(q => q.Vol)),
-                new Microsoft.Data.Analysis.PrimitiveDataFrameColumn<double>("Amount", quotes.Select(q => q.Amount))
+                new PrimitiveDataFrameColumn<byte>("Market", quotes.Select(q => q.Market)),
+                new StringDataFrameColumn("Code", quotes.Select(q => q.Code)),
+                new PrimitiveDataFrameColumn<double>("Price", quotes.Select(q => q.Price)),
+                new PrimitiveDataFrameColumn<double>("LastClose", quotes.Select(q => q.LastClose)),
+                new PrimitiveDataFrameColumn<double>("Open", quotes.Select(q => q.Open)),
+                new PrimitiveDataFrameColumn<double>("High", quotes.Select(q => q.High)),
+                new PrimitiveDataFrameColumn<double>("Low", quotes.Select(q => q.Low)),
+                new PrimitiveDataFrameColumn<int>("Vol", quotes.Select(q => q.Vol)),
+                new PrimitiveDataFrameColumn<double>("Amount", quotes.Select(q => q.Amount))
                 // Add other columns as needed
             };
 
-            return new Microsoft.Data.Analysis.DataFrame(columns);
+            return new DataFrame(columns);
+        }
+
+        public static async Task<(string Ip, int Port)?> FindBestIp(int top = 5)
+        {
+            var tasks = HqHosts.List.Select(Ping).ToList();
+            var results = await Task.WhenAll(tasks);
+
+            var bestHost = results
+                .Where(r => r.Time.HasValue)
+                .OrderBy(r => r.Time.Value)
+                .FirstOrDefault();
+
+            return bestHost.Host;
+        }
+
+        private static async Task<((string Ip, int Port)? Host, TimeSpan? Time)> Ping((string Name, string Ip, int Port) hostInfo)
+        {
+            var api = new TdxHqApi();
+            try
+            {
+                var stopwatch = Stopwatch.StartNew();
+                bool success = false;
+                await Task.Run(() =>
+                {
+                    if (api.Connect(hostInfo.Ip, hostInfo.Port, timeout: 2000))
+                    {
+                        var count = api.GetSecurityCount(0); // Market 0 for SZ
+                        if (count > 1000)
+                        {
+                            success = true;
+                        }
+                    }
+                });
+                stopwatch.Stop();
+
+                if (success)
+                {
+                    Console.WriteLine($"Ping {hostInfo.Name} ({hostInfo.Ip}:{hostInfo.Port}) - {stopwatch.ElapsedMilliseconds} ms - OK");
+                    return ((hostInfo.Ip, hostInfo.Port), stopwatch.Elapsed);
+                }
+                else
+                {
+                    Console.WriteLine($"Ping {hostInfo.Name} ({hostInfo.Ip}:{hostInfo.Port}) - FAILED (No valid response)");
+                    return (null, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ping {hostInfo.Name} ({hostInfo.Ip}:{hostInfo.Port}) - FAILED ({ex.GetType().Name})");
+                return (null, null);
+            }
+            finally
+            {
+                api.Disconnect();
+            }
         }
     }
 }

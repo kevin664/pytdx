@@ -1,12 +1,22 @@
 ﻿using Pytdx;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-Console.WriteLine("Connecting to TDX Server...");
+Console.WriteLine("Finding best TDX server...");
+var bestIp = await TdxHqApi.FindBestIp();
+
+if (bestIp == null)
+{
+    Console.WriteLine("No available servers found.");
+    return;
+}
+
+Console.WriteLine($"Best server found: {bestIp.Value.Ip}:{bestIp.Value.Port}. Connecting...");
 
 using (var api = new TdxHqApi(raiseException: true))
 {
-    if (api.Connect("101.227.73.20", 7709))
+    if (api.Connect(bestIp.Value.Ip, bestIp.Value.Port))
     {
         Console.WriteLine("Connected successfully.");
 
