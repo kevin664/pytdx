@@ -1,0 +1,13 @@
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.csproj.AssemblyReference.cache
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.GeneratedMSBuildEditorConfig.editorconfig
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.AssemblyInfoInputs.cache
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.AssemblyInfo.cs
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.csproj.CoreCompileInputs.cache
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.sourcelink.json
+/app/csharp_pytdx/Pytdx/bin/Debug/net8.0/Pytdx.deps.json
+/app/csharp_pytdx/Pytdx/bin/Debug/net8.0/Pytdx.dll
+/app/csharp_pytdx/Pytdx/bin/Debug/net8.0/Pytdx.pdb
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.dll
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/refint/Pytdx.dll
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/Pytdx.pdb
+/app/csharp_pytdx/Pytdx/obj/Debug/net8.0/ref/Pytdx.dll

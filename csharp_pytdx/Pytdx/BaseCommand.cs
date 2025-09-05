@@ -11,10 +11,10 @@ namespace Pytdx
     {
         private const int RspHeaderLen = 0x10;
 
-        protected byte[] SendPkg;
-        private readonly Socket _socket;
+        protected byte[]? SendPkg;
+        private readonly Socket? _socket;
 
-        protected BaseCommand(Socket socket)
+        protected BaseCommand(Socket? socket)
         {
             _socket = socket;
         }

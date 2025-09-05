@@ -9,14 +9,14 @@ namespace Pytdx
 {
     public abstract class BaseSocketClient : IDisposable
     {
-        private readonly object _lock;
-        private Socket _socket;
+        protected readonly object? _lock;
+        protected Socket? _socket;
         private readonly bool _multithread;
         private readonly bool _heartbeat;
         private readonly bool _autoRetry;
         private readonly bool _raiseException;
 
-        protected string Ip { get; private set; }
+        protected string? Ip { get; private set; }
         protected int Port { get; private set; }
         protected IRetryStrategy RetryStrategy { get; set; }
 

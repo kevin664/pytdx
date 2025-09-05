@@ -21,7 +21,7 @@ namespace Pytdx
         /// <summary>
         /// The original exception that was caught.
         /// </summary>
-        public Exception OriginalException { get; set; }
+        public Exception? OriginalException { get; set; }
 
         public TdxFunctionCallException(string message) : base(message) { }
 

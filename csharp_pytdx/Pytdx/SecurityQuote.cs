@@ -5,14 +5,14 @@ namespace Pytdx
     public record SecurityQuote
     {
         public byte Market { get; init; }
-        public string Code { get; init; }
+        public string? Code { get; init; }
         public int Active1 { get; init; }
         public double Price { get; init; }
         public double LastClose { get; init; }
         public double Open { get; init; }
         public double High { get; init; }
         public double Low { get; init; }
-        public string ServerTime { get; init; }
+        public string? ServerTime { get; init; }
         public int ReversedBytes0 { get; init; }
         public int ReversedBytes1 { get; init; }
         public int Vol { get; init; } //成交量
