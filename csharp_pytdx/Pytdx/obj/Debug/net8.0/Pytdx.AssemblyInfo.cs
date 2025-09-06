@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pytdx")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ca5c31f784c4c67fb72adc586ba5934545a1864")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4298c041a98deafbf59cecf2256ff326e100b46e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pytdx")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pytdx")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

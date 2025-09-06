@@ -72,9 +72,8 @@ namespace Pytdx
             }
             else
             {
-                // Decompress using ZLib
+                // Decompress using ZLib, which is equivalent to Python's zlib.decompress
                 using (var memoryStream = new MemoryStream(bodyBuf))
-                // Skip the first two bytes of the zlib header
                 using (var zlibStream = new ZLibStream(memoryStream, CompressionMode.Decompress))
                 using (var resultStream = new MemoryStream())
                 {
